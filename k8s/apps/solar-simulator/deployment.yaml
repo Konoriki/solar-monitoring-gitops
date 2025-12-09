@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: solar-simulator
-        image: solar-simulator:v1
+        image: solar-simulator:v2
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
