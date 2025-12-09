@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: monitoring-stack
+  name: monitoring-prometheus
   namespace: argocd
 spec:
   project: default
@@ -18,3 +18,22 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitoring-grafana
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Konoriki/solar-monitoring-gitops.git
+    targetRevision: HEAD
+    path: k8s/monitoring/grafana
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
