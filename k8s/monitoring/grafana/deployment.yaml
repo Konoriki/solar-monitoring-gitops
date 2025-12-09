@@ -27,14 +27,14 @@ spec:
             requests:
               memory: "128Mi"
               cpu: "100m"
-            [cite_start]limits: # FinOps: on limite la consommation [cite: 237]
+            limits:
               memory: "256Mi"
               cpu: "200m"
       volumes:
         - name: grafana-datasources
           configMap:
             name: grafana-datasources
----
+
 apiVersion: v1
 kind: Service
 metadata:
