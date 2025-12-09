@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-rules
+  namespace: monitoring
+  labels:
+    app: prometheus
+data:
+  solar_alerts.yml: |
+    groups:
+    - name: solar_alerts
+      rules:
+      # 1. Alerte Surchauffe (> 65°C pendant 1m)
+      - alert: SolarPanelOverheating
+        expr: solar_panel_temperature_celsius > 65
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Surchauffe panneau détectée"
+          description: "Le panneau sur {{ $labels.farm }} est à {{ $value }}°C (Seuil: 65°C)."
+
+      # 2. Panne Onduleur (Status = 0)
+      - alert: InverterFailure
+        expr: solar_inverter_status == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Panne onduleur critique"
+          description: "L'onduleur de la ferme {{ $labels.farm }} est hors service."
+
+      # 3. Production Anormalement Basse (Production nulle alors qu'il fait soleil)
+      - alert: LowProductionHighIrradiance
+        expr: solar_power_watts == 0 and solar_irradiance_wm2 > 200
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Production nulle sous fort ensoleillement"
+          description: "La ferme {{ $labels.farm }} ne produit rien malgré une irradiance de {{ $value }} W/m2."

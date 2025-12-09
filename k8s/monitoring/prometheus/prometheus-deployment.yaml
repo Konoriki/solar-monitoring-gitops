@@ -23,7 +23,11 @@ spec:
             - containerPort: 9090
           volumeMounts:
             - name: config-volume
-              mountPath: /etc/prometheus
+              mountPath: /etc/prometheus/prometheus.yml
+              subPath: prometheus.yml
+            # Nouveau mount pour les règles
+            - name: rules-volume
+              mountPath: /etc/prometheus/rules
             - name: storage-volume
               mountPath: /prometheus
           resources:
@@ -34,6 +38,10 @@ spec:
         - name: config-volume
           configMap:
             name: prometheus-config
+        # Nouveau volume lié au ConfigMap des règles
+        - name: rules-volume
+          configMap:
+            name: prometheus-rules
         - name: storage-volume
           emptyDir: {}
 ---
