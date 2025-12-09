@@ -34,7 +34,7 @@ spec:
         - name: grafana-datasources
           configMap:
             name: grafana-datasources
-
+---
 apiVersion: v1
 kind: Service
 metadata:
