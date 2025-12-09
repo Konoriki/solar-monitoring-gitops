@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: solar-simulator
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Konoriki/solar-monitoring-gitops.git
+    targetRevision: HEAD
+    path: k8s/apps/solar-simulator
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: solar-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
